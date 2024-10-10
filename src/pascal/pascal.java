@@ -39,19 +39,19 @@ public class pascal {
      * @return Array of coefficients for expanded terms
      */
     public static int[] series(int A, int X, int n) {
-        int[] coefficient = new int[n+1];
+        int[] coefficient = new int[n + 1];
 
         // calculates the value of n
         int nFact = factorial(n);
 
-        for (int i = 0; i < n + 1; i++) {
+        for (int i = 0; i <= n; i++) {
             // calculates the value of nCr
             int niFact = factorial(n - i);
             int iFact = factorial(i);
 
             // calculates the powers
-            int aPow = (int)Math.pow(A, n - i);
-            int xPow = (int)Math.pow(X, i);
+            int aPow = (int) Math.pow(A, n - i);
+            int xPow = (int) Math.pow(X, i);
 
             // puts series into an integer array
             coefficient[i] = ((nFact * aPow * xPow) / (niFact * iFact));
@@ -88,18 +88,24 @@ public class pascal {
         // print the expanded form
         StringBuilder result = new StringBuilder();
         for (int i = 0; i <= n; i++) {
-            // determine the sign (plus or minus)
-            String operation = (ans[i] >= 0 && i != 0) ? " + " : " - ";
-            int absCoefficient = Math.abs(ans[i]);
+            int coefficient = ans[i];
+            
+            // skip the terms with the zero coefficient
+            if (coefficient == 0) continue;
 
-            // create the term
-            String term = absCoefficient + "x^" + (n - i);
+            // determine sign and abs
+            String sign = (coefficient > 0 && i > 0) ? " + " : (coefficient < 0 ? " - " : "");
+            int absCoefficient = Math.abs(coefficient);
 
             // append term
-            if (i == 0) {
-                result.append(absCoefficient).append("x^").append(n - i);
+            if (i == n) {
+                // no x
+                result.append(sign).append(absCoefficient);
+            } else if (absCoefficient == 1) {
+                // no 1 unless it's a constant term
+                result.append(sign).append("x^").append(n - i);
             } else {
-                result.append(operation).append(term);
+                result.append(sign).append(absCoefficient).append("x^").append(n - i);
             }
         }
 
